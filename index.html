@@ -294,9 +294,9 @@
                         </a>
                     </li>
                     <li class="list-inline-item mx-4">
-                            <a href="">
+                            <a href="https://player.vimeo.com/video/935000717">
                             <img src="icons/youtube_icon.png" class="icons">
-                            <p>Video (Comming soon!)</p>
+                            <p>Video</p>
                             </a>
                     </li>
                     <li class="list-inline-item mx-4">
@@ -392,24 +392,27 @@
         <div class="container">
         <div class="row" id="abstract">
             <div class="col my-3">
-                <img src="images/teaser.png" class="teaser_fig">
+                <img src="images/overview.png" class="teaser_fig">
                 <br><br>
 
                 <p class="text_header">
-                    Summary
+                    Introduction
                 </p>
-
+                <img src="images/teaser.png" class="teaser_fig">
                 <p class="body_text">
                     <ul>
-
-                    	<li class="body_text">We introduce a novel framework for <b>one-shot learning</b> of dexterous manipulations, leveraging
-                            semantic scene understanding distilled into 3D feature fields.</li>
-                    	<li class="body_text">We devise an efficient method for deriving <b>view-consistent 3D features</b> from 2D image models,
-                            incorporating a lightweight feature refinement network and a point pruning mechanism. This
-                            facilitates the application of our network to new scenes, predicting consistent features without
-                            requiring any adjustments or fine-tuning.</li>
-                    	<li class="body_text">• Our <b>real-world</b> experiments with a dexterous hand affirm our method’s effectiveness, demonstrating
-                            its robustness and superior <b>generalization</b> ability in varied scenarios.</li>
+                    	<p class="body_text">We introduce a novel method, SparseDFF, for distilling 
+                            view-consistent <b>3D Distilled Feature Field (DFF)</b> from sparse RGBD images, 
+                            readily generalizable to novel scenes without any modifications or 
+                            fine-tuning. The DFFs create dense correspondences across scenes, 
+                            enabling <b>one-shot</b> learning of <b>dexterous manipulations</b>. This 
+                            approach facilitates seamless manipulation transfer to new scenes, 
+                            effectively handling variations in object poses, deformations, scene 
+                            contexts, and categories.
+                        <p class="body_text">Our approach can be applied to various objects, bears, boxes, 
+                            monkeys, and so on to convert an object, which can be a source or 
+                            a target, to a feature field then optimized the feature field to the 
+                            one with higher consistency.
                     </ul>
                 </p>
             </div>
@@ -445,8 +448,8 @@
                     Method Overview
                 </p>
                 <br>
-                <img src="images/teaser.png" class="teaser_fig" >
-                <br>
+                <!-- <img src="images/teaser.png" class="teaser_fig" > -->
+                <!-- <br> -->
 
                 <p class="body_text">
                     Our method introduces a novel method, SparseDFF, for distilling view-consistent 3D Distilled Feature Field ( DFF ) from sparse RGBD images, readily generalizable to novel scenes
@@ -455,33 +458,24 @@
                     scenes, effectively handling variations in object poses, deformations, scene contexts, and categories.
                 </p>
                 <p class="text_subheader">
-                    3D Distilled Feature Field
+                    Constructing sparse-view DFFs
                 </p>
                 <br>
-                <img src="images/constructDFF.png" class="teaser_fig" width="90%">
+                <img src="images/construct_DFF.png" class="teaser_fig" width="90%">
                 <br>
                 
                 <p class="body_text">
-                    <!-- Initially, Given a pair of RGBD scans from a 3D scene, we first extract DINO features from the images and back-project them to the partial
-                    point clouds.  However, while DINO does exhibit correspondences across views, it is not strictly multiview-invariant, leading
-                    to local feature discrepancies in overlapping views.
-                    To address the problem of local feature discrepancies in overlapping views, 
-                    we propose a lightweight feature refinement network. This network, consisting of a two-layer per-point MLP, 
-                    can be efficiently trained on a single source scene. 
-                    When applied to novel scenes, it produces consistent and high-quality features without any modifications. 
-                    The main concept behind this approach is to ensure that features within the same neighborhood are similar, 
-                    while those from distant neighborhoods are distinct. 
-                    We achieve this by optimizing the network's weights using the contrastive learning framework. 
-                    During training, the refined features obtained from the network are passed through a projection head to obtain projected features. 
-                    However, after training on the source scene, the projection head is discarded, 
-                    and only the feature refinement network is utilized for novel scenes.
-                    Additionally, we implement a point-pruning mechanism to augment feature continuity within each local neighborhood.  -->
-                    Given a 3D point cloud X, we aim to first construct a continuous feature field
-                    surrounding the scene, as illustrated in the Figure above. This field provides semantic understandings for interscene correspondences, extending beyond geometric descriptors. Utilizing a
-                    lightweight feature network, trained once on the source scene, enables direct adaptation to target
-                    scenes without additional fine-tuning. We then introduce a pruning method to enhance feature
-                    continuity, akin to the classical Hough voting . 
-                    
+                    <ul>
+                    	<p class="body_text"> We sample query 
+                            points on the end-effector and compute 
+                            their features using the learned 3D feature 
+                            field. Minimizing the feature differences as an 
+                            energy function facilitates the transfer of the 
+                            end-effector pose from the source 
+                            demonstration to the target manipulation. The color gradient on 
+                            the hand indicates the optimization steps 
+                            from start to end.
+                    </ul>
                 </p>
 
                 <p class="text_subheader">
@@ -492,10 +486,14 @@
                 <br>
 
                 <p class="body_text">
-                    By establishing coherent feature fields on both source and target scenes, we devise an energy function that facilitates 
-                    the minimization of feature discrepancies w.r.t. the end-effector parameters between the demonstration and the target 
-                    manipulation. Additionally, to prevent extreme hand poses that could potentially damage the robot, we impose a
-                    pose constraint energy loss penalizing out-of-limit hand pose.
+                    We sample query 
+                    points on the end-effector and compute 
+                    their features using the learned 3D feature 
+                    field. Minimizing the feature differences as an 
+                    energy function facilitates the transfer of the 
+                    end-effector pose from the source 
+                    demonstration to the target manipulation.
+
                     <!-- We employ the demonstrated end-effector pose to formulate an energy function between source and target scenes
                     via the feature fields. This function facilitates the optimization of the end-effector pose in the target
                     scene while conforming to physical constraints  -->
@@ -520,24 +518,65 @@
                 <p class="text_header">
                     Experiments
                 </p>
-                
+                <p class="text_subheader">
+                    Real robot setup
+                </p>
+                <img src="images/setup.png" class="teaser_fig" width="80%">
+
                 <p class="body_text">
-                    We evaluate our model by deploying it to a robot hand and conducting experiments under various
-                    setups. Given the superior stability of large image models like DINO on real photos compared 
-                    to synthetic images, we opt to assess our method directly in real-world settings, bypassing simulations.
+                    Our methodology is validated through real-world experiments with a dexterous hand 
+                    interacting with both rigid and deformable 
+                    objects Our real robot setup consists of 
+                    four Kinect cameras hanging on four pillars 
+                    used to get point clouds of the scene, a UR 
+                    10e arm, a dexterous hand, and an object 
+                    on the table to be manipulated.
+                </p>
+                <p class="text_subheader">
+                    Qualitative results on rigid objects grasping
+                </p>
+                <img src="images/rigid.png" class="teaser_fig" width="80%">
+
+                <p class="body_text">
+                    Each panel illustrates the initial grasping pose,
+                    determined via our end-effector optimization, followed by a frame capturing the successful lift-off of the target
+                    object. (a) Grasping Box1 and transferring the skill to Boxes in new poses, including a distinct box Box2. (b) A
+                    functional grasp of a drill by its handle. (c) Transferring the learned grasp on Bowl1 to bowls with varied shapes
+                    (top row) and cross-category generalization to Mugs (bottom row).
                 </p>
                 <br>
-                <img src="images/vis_volume.png" class="teaser_fig" width="80%">
+                <img src="images/rigid_table.png" class="teaser_fig" width="80%">
+                <br>
+
+                <p class="text_subheader">
+                    Qualitative results on deformable objects grasping
+                </p>
+                <img src="images/deformable.png" class="teaser_fig" width="80%">
+
+                <p class="body_text">
+                    For each successful grasp, we show the initial
+                    grasping pose and a frame demonstrating the successful lift of the object off the table. (a) Learning to grasp
+                    SmallBear and transferring this skill to various poses and to the Monkey. (b) Learning to grasp BigBear by
+                    the nose is challenging due to its small nose. (c) Learning to grasp the Monkey, showcasing adaptability to
+                    significant deformations and transfers to SmallBear. Additionally, a challenging scenario is presented where the
+                    Monkey is surrounded by multiple objects, showing the capability to handle interactions and occlusions.
+
+                </p>
+                <br>
+                <img src="images/deformable_table.png" class="teaser_fig" width="80%">
+                <br>
+                <p class="text_subheader">
+                    Pet toy animals
+                </p>
+                <br>
+                <img src="images/pet.png" class="teaser_fig" width="80%">
                 <br>
                 <p class="body_text">
-                This figure visualizes the energy field derived from the differences in
-features between the source and target scenes. Areas marked in yellow represent regions with smaller feature
-differences, indicating higher similarity, while purple denotes larger differences, highlighting dissimilarity
-between features.</p>
-                <img src="images/vis_prune.png" class="teaser_fig" width="80%">
-                <br>
-                <p class="body_text">Features on the point clouds are visualized with RGB values after PCA
-                    to 3 channels. The hand positions obtained through optimization are shown in blue.</p>
+                    Pet toy animals. (a) Head caressing is transferred from a single, lying Monkey to a scene with
+                    the Monkey hugging the BigBear, exemplifying the method’s adaptability to varying scene compositions and
+                    interactions. (b) Butt patting is transferred from the Monkey to the SmallBear, whether the SmallBear is alone or
+                    in different scene contexts, underlining the method’s versatility across various scenarios and object interactions.                    
+                </p>
             </div>
         </div>
         </div>
